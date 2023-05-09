@@ -1,4 +1,7 @@
+"use client";
+
 import Image from 'next/image'
+import InputWrapper from './components/InputWrapper';
 
 export default function Home() {
   return (
@@ -9,15 +12,29 @@ export default function Home() {
       </div>
       <div className='flex flex-1 items-center justify-center h-full'>
         <form className='flex flex-col w-1/2'>
-          <label>CARDHOLDER NAME</label>
-          <input placeholder='John Doe'></input>
-          <label>CARD NUMBER</label>
-          <input placeholder='1234 XXXX XXXX 1234'></input>
-          <label>EXP. DATE</label>
-          <input placeholder='MM/YY'></input>
-          <label>CVC</label>
-          <input placeholder='123'></input>
-          <button>Confirm</button>
+          <label className='text-lg'>CARDHOLDER NAME</label>
+          <InputWrapper component={<input placeholder='John Doe' className='p-2 rounded w-full text-lg' />} />
+          <label className='text-lg'>CARD NUMBER</label>
+          <InputWrapper component={<input placeholder='1234 XXXX XXXX 1234' className='p-2 rounded w-full text-lg' />} />
+          <span>Wrong format, numbers only</span>
+
+          <div className='flex'>
+            <div className='flex flex-col flex-1 pr-1'>
+              <label>EXP. DATE</label>
+              <div className='flex'>
+                <InputWrapper component={<input placeholder='MM' className='p-2 rounded w-full text-lg' />} />
+                <InputWrapper component={<input placeholder='YY' className='p-2 rounded w-full text-lg' />} />
+              </div>
+              <span>Can't be blank</span>
+            </div>
+
+            <div className='flex flex-col flex-1'>
+              <label>CVC</label>
+              <InputWrapper component={<input placeholder='123' className='p-2 rounded w-full text-lg' />} />
+              <span>Can't be blank</span>
+            </div>
+          </div>
+          <button className='rounded p-2 bg-slate-50 text-black mt-4'>Confirm</button>
         </form>
       </div>
     </main >
