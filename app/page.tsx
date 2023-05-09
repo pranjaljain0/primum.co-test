@@ -1,6 +1,6 @@
 "use client";
 
-import { isCCMonthValid, isCCYearValid, isCreditCardNumberValid } from './helpers/helper';
+import { formatCreditCardNumber, isCCMonthValid, isCCYearValid, isCreditCardNumberValid } from './helpers/helper';
 
 import Image from 'next/image'
 import InputWrapper from './components/InputWrapper';
@@ -71,9 +71,13 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-between">
+    <main className="flex min-h-screen items-center justify-between font-sans">
       <div className='flex flex-col flex-1 items-center justify-center min-h-screen w-full bg-[url(/bg-main-desktop.png)] bg-no-repeat'>
-        <Image src={"/bg-card-front.png"} alt='card front' width={447} height={244} className='m-10' />
+        <div className='relative'>
+          <Image src={"/bg-card-front.png"} alt='card front' width={447} height={244} className='m-10' />
+          <span className='absolute bottom-[120px] right-[140px] text-white text-2xl'>{formatCreditCardNumber("1234123412341234")}</span>
+          <span className='absolute bottom-[90px] right-[140px] text-white'>MM/YY</span>
+        </div>
         <Image src={"/bg-card-back.png"} alt='card front' width={447} height={244} className='ml-20' />
       </div>
       <div className='flex flex-1 items-center justify-center h-full'>

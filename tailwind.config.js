@@ -6,6 +6,9 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      sans: ['Space Grotesk']
+    },
     extend: {
       colors: {
         'theme-blue': 'hsl(249, 99%, 64%)',

@@ -24,3 +24,13 @@ export function isCCMonthValid(month: string): boolean {
 export function isCCYearValid(month: string): boolean {
     return !(parseInt(month) <= 40 && parseInt(month) >= 23)
 }
+
+export function formatCreditCardNumber(cardNumber: string): string {
+    cardNumber = cardNumber.replace(/\s+/g, '').replace(/-/g, '');
+    const groups = cardNumber.match(/.{1,4}/g);
+    if (groups && groups.length === 3) {
+        groups[1] = '****';
+        groups[2] = '****';
+    }
+    return groups ? groups.join(' ') : cardNumber;
+}
