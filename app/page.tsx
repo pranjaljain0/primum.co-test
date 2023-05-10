@@ -1,6 +1,6 @@
 "use client";
 
-import { formatCreditCardNumber, isCCMonthValid, isCCYearValid, isCreditCardNumberValid } from './helpers/helper';
+import { formatCreditCardDate, formatCreditCardNumber, isCreditCardMonthValid, isCreditCardNumberValid, isCreditCardYearValid } from './helpers/helper';
 
 import Image from 'next/image'
 import InputWrapper from './components/InputWrapper';
@@ -57,10 +57,10 @@ export default function Home() {
             setShowError(prevState => ({ ...prevState, [item]: isCreditCardNumberValid(cardDetails[item]) }))
             break;
           case "MM":
-            setShowError(prevState => ({ ...prevState, [item]: isCCMonthValid(cardDetails[item]) }))
+            setShowError(prevState => ({ ...prevState, [item]: isCreditCardMonthValid(cardDetails[item]) }))
             break;
           case "YY":
-            setShowError(prevState => ({ ...prevState, [item]: isCCYearValid(cardDetails[item]) }))
+            setShowError(prevState => ({ ...prevState, [item]: isCreditCardYearValid(cardDetails[item]) }))
             break;
           default:
             setShowError(prevState => ({ ...prevState, [item]: false }))
@@ -74,9 +74,11 @@ export default function Home() {
     <main className="flex min-h-screen items-center justify-between font-sans">
       <div className='flex flex-col flex-1 items-center justify-center min-h-screen w-full bg-[url(/bg-main-desktop.png)] bg-no-repeat'>
         <div className='relative'>
+          <Image src="/card-logo.svg" alt="Some" width={80} height={80} className='absolute top-[50px] left-[50px]' />
           <Image src={"/bg-card-front.png"} alt='card front' width={447} height={244} className='m-10' />
-          <span className='absolute bottom-[120px] right-[140px] text-white text-2xl'>{formatCreditCardNumber("1234123412341234")}</span>
-          <span className='absolute bottom-[90px] right-[140px] text-white'>MM/YY</span>
+          <span className='absolute bottom-[150px] right-[150px] text-white text-2xl'>{formatCreditCardNumber(cardDetails.CardNumer)}</span>
+          <span className='absolute bottom-[90px] right-[100px] text-white'>{formatCreditCardDate(cardDetails.MM, cardDetails.YY)}</span>
+          <span className='absolute bottom-[90px] left-[80px] text-white'>{cardDetails.Name.length != 0 ? cardDetails.Name : "John Doe"}</span>
         </div>
         <Image src={"/bg-card-back.png"} alt='card front' width={447} height={244} className='ml-20' />
       </div>
@@ -86,7 +88,6 @@ export default function Home() {
           <InputWrapper type="text" placeholder="Jane Doe" name="Name" handleInputChange={handleInputChange} errorMessage="Can&apos;t be blank" showError={showError["Name"]} />
           <label className='text-lg'>CARD NUMBER</label>
           <InputWrapper type="text" placeholder='1234 XXXX XXXX 1234' errorMessage="Wrong format, numbers only" name="CardNumer" handleInputChange={handleInputChange} showError={showError["CardNumer"]} />
-
           <div className='flex'>
             <div className='flex flex-col flex-1 pr-1'>
               <label>EXP. DATE (MM/YY)</label>
@@ -95,10 +96,9 @@ export default function Home() {
                 <InputWrapper placeholder='YY' type="text" errorMessage="Can&apos;t be blank" name="YY" handleInputChange={handleInputChange} showError={showError["YY"]} />
               </div>
             </div>
-
             <div className='flex flex-col flex-1'>
               <label>CVC</label>
-              <InputWrapper placeholder='123' type="text" errorMessage="Can&apos;t be blank" name="CVV" handleInputChange={handleInputChange} showError={showError["CVV"]} />
+              <InputWrapper placeholder='123' type="password" errorMessage="Can&apos;t be blank" name="CVV" handleInputChange={handleInputChange} showError={showError["CVV"]} />
             </div>
           </div>
           <button className='rounded p-3 bg-theme-violet text-white mt-4' onClick={(e) => { handleOnSubmit(e) }}>Confirm</button>
