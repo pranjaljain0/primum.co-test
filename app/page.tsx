@@ -1,29 +1,14 @@
 "use client";
 
-import { formatCreditCardDate, formatCreditCardNumber, isCreditCardMonthValid, isCreditCardNumberValid, isCreditCardYearValid } from './helpers/helper';
+import { formatCreditCardDate, formatCreditCardNumber } from './helpers/helper';
 
+import { CardDetails } from './helpers/interfaces';
+import CardDetailsInputForm from './components/CardDetailsInputForm';
 import Image from 'next/image'
-import InputWrapper from './components/InputWrapper';
 import { useState } from 'react';
 
 export default function Home() {
-  interface CardDetails {
-    Name: string,
-    CardNumer: string,
-    MM: string,
-    YY: string,
-    CVV: string,
-    [key: string]: string;
-  }
-
-  interface InputCardDetailsStatus {
-    Name: boolean,
-    CardNumer: boolean,
-    MM: boolean,
-    YY: boolean,
-    CVV: boolean,
-    [key: string]: boolean;
-  }
+  const [correctCardDetails, setCorrectCardDetails] = useState(false)
   const [cardDetails, setCardDetails] = useState<CardDetails>({
     Name: "",
     CardNumer: "",
@@ -32,43 +17,6 @@ export default function Home() {
     CVV: ""
   })
 
-  const [showError, setShowError] = useState<InputCardDetailsStatus>({
-    Name: false,
-    CardNumer: false,
-    MM: false,
-    YY: false,
-    CVV: false
-  })
-
-  const handleInputChange = (e: any, type: string) => {
-    setCardDetails({
-      ...cardDetails, [type]: e.target.value
-    })
-  }
-
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
-    Object.keys(cardDetails).forEach((item) => {
-      if (cardDetails[item].length === 0)
-        setShowError(prevState => ({ ...prevState, [item]: true }))
-      else {
-        switch (item) {
-          case "CardNumer":
-            setShowError(prevState => ({ ...prevState, [item]: isCreditCardNumberValid(cardDetails[item]) }))
-            break;
-          case "MM":
-            setShowError(prevState => ({ ...prevState, [item]: isCreditCardMonthValid(cardDetails[item]) }))
-            break;
-          case "YY":
-            setShowError(prevState => ({ ...prevState, [item]: isCreditCardYearValid(cardDetails[item]) }))
-            break;
-          default:
-            setShowError(prevState => ({ ...prevState, [item]: false }))
-            break;
-        }
-      }
-    })
-  }
 
   return (
     <main className="flex min-h-screen items-center justify-between font-sans">
@@ -83,26 +31,7 @@ export default function Home() {
         <Image src={"/bg-card-back.png"} alt='card front' width={447} height={244} className='ml-20' />
       </div>
       <div className='flex flex-1 items-center justify-center h-full'>
-        <form className='flex flex-col w-1/2'>
-          <label className='text-lg'>CARDHOLDER NAME</label>
-          <InputWrapper type="text" placeholder="Jane Doe" name="Name" handleInputChange={handleInputChange} errorMessage="Can&apos;t be blank" showError={showError["Name"]} />
-          <label className='text-lg'>CARD NUMBER</label>
-          <InputWrapper type="text" placeholder='1234 XXXX XXXX 1234' errorMessage="Wrong format, numbers only" name="CardNumer" handleInputChange={handleInputChange} showError={showError["CardNumer"]} />
-          <div className='flex'>
-            <div className='flex flex-col flex-1 pr-1'>
-              <label>EXP. DATE (MM/YY)</label>
-              <div className='flex'>
-                <InputWrapper placeholder='MM' type="text" errorMessage="Can&apos;t be blank" name="MM" handleInputChange={handleInputChange} showError={showError["MM"]} />
-                <InputWrapper placeholder='YY' type="text" errorMessage="Can&apos;t be blank" name="YY" handleInputChange={handleInputChange} showError={showError["YY"]} />
-              </div>
-            </div>
-            <div className='flex flex-col flex-1'>
-              <label>CVC</label>
-              <InputWrapper placeholder='123' type="password" errorMessage="Can&apos;t be blank" name="CVV" handleInputChange={handleInputChange} showError={showError["CVV"]} />
-            </div>
-          </div>
-          <button className='rounded p-3 bg-theme-violet text-white mt-4' onClick={(e) => { handleOnSubmit(e) }}>Confirm</button>
-        </form>
+        {!correctCardDetails ? <CardDetailsInputForm cardDetails={cardDetails} setCardDetails={setCardDetails} setCorrectCardDetails={setCorrectCardDetails} /> : <h1>Correct details</h1>}
       </div>
     </main >
   )
